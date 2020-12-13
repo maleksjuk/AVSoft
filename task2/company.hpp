@@ -19,6 +19,7 @@ using namespace std;
 #define XML_FILE "tst.xml"
 
 #define SLEEP_WAIT 200000
+#define BUFF_SIZE 255
 
 #define INDENT_DEPARTMENT "  "
 #define INDENT_EMPLOYEE   "    "
@@ -73,6 +74,7 @@ public:
     void printer();
 };
 
+
 class Department
 {
 private:
@@ -95,10 +97,11 @@ public:
     void addEmployee(string _surname, string _name, string _middleName,
                      string _function, int _salary);
     void delEmployee(string FIO);
-    void editEmployee();
+    void editEmployee(int id, char cmd, string new_value);
 
     void printer();
 };
+
 
 class Menu
 {

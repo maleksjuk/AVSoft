@@ -60,11 +60,35 @@ void Department::delEmployee(string FIO)
     }
 }
 
-// void Department::editEmployee();
+void Department::editEmployee(int id, char cmd, string new_value)
+{
+    Employee &employee = employments[id];
+
+    switch (cmd)
+    {
+    case '1':
+        employee.setSurname(new_value);
+        break;
+    case '2':
+        employee.setName(new_value);
+        break;
+    case '3':
+        employee.setMiddleName(new_value);
+        break;
+    case '4':
+        employee.setFunction(new_value);
+        break;
+    case '5':
+        employee.setSalary(std::stoi(new_value));
+        break;
+    default:
+        break;
+    }
+}
 
 void Department::printer()
 {
-    cout << CLR_RED << "Подразделение: " << name << CLR_RESET << endl;
+    cout << CLR_CYAN << "Подразделение: " << name << CLR_RESET << endl;
     cout << INDENT_DEPARTMENT << "Количество сотрудников: " << count_employee << endl;
     cout << INDENT_DEPARTMENT << "Средняя зарплата: " << mean_salary << endl;
 

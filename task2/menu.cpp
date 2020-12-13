@@ -20,11 +20,11 @@ void Menu::printer()
 {
     std::cout
         << "____________________\n"
-        << getTitle() << std::endl;
+        << CLR_MAGENTA << getTitle() << CLR_RESET << std::endl;
     for (auto &action : actions)
         std::cout << action.first << " --> " << action.second << std::endl;
     std::cout
-        << "^^^^^^^^^^^^^^^^^^^^" << std::endl;
+        << "^^^^^^^^^^^^^^^^^^^^\n" << std::endl;
 }
 
 Menu create_menu_main()
@@ -65,10 +65,10 @@ Menu create_menu_employee()
 
 void main_menu(vector<Department> &company, vector<Menu> &menu_list)
 {
-    bool right;
-    char cmd;
-    string name;
-    int i;
+    bool    right;
+    char    cmd;
+    string  name;
+    int     i;
 
     if (term_set())
         term_reset();
@@ -98,12 +98,11 @@ void main_menu(vector<Department> &company, vector<Menu> &menu_list)
                 menu_department(company, menu_list, i - 1);
             else
                 error_msg("Главное меню", "Неверный номер");
-                // std::cout << "Неверный номер" << std::endl;
             break;
         
         case 'a':
             std::cout << "СОЗДАНИЕ НОВОГО ПОДРАЗДЕЛЕНИЯ\n" << "Введите название: ";
-            std::cin >> name;
+            std::getline(std::cin, name);
             add_department(company, name);
             break;
         
@@ -118,7 +117,6 @@ void main_menu(vector<Department> &company, vector<Menu> &menu_list)
                 company.erase(company.begin() + i - 1);
             else
                 error_msg("Главное меню", "Неверный номер");
-                // std::cout << "Неверный номер" << std::endl;
             break;
         
         default:
@@ -136,14 +134,15 @@ void main_menu(vector<Department> &company, vector<Menu> &menu_list)
 
 void menu_department(vector<Department> &company, vector<Menu> &menu_list, int id)
 {
-    bool right;
-    char cmd;
-    int i;
-    string name;
-    string surname;
-    string middleName;
-    string function;
-    int salary;
+    bool    right;
+    char    cmd;
+    int     i;
+    string  name;
+    string  surname;
+    string  middleName;
+    string  function;
+    int     salary;
+
     Department &department = company[id];
 
     if (term_set())
@@ -165,7 +164,7 @@ void menu_department(vector<Department> &company, vector<Menu> &menu_list, int i
         
         case 'n':
             std::cout << "[РЕДАКТИРОВАНИЕ] Введите новое название: ";
-            std::cin >> name;
+            std::getline(std::cin, name);
             department.setName(name);
             break;
         
@@ -180,19 +179,18 @@ void menu_department(vector<Department> &company, vector<Menu> &menu_list, int i
                 menu_employee(department, menu_list, i - 1);
             else
                 error_msg("Меню подразделения", "Неверный номер");
-                // std::cout << "Неверный номер" << std::endl;
             break;
         
         case 'a':
             std::cout << "ДОБАВЛЕНИЕ НОВОГО СОТРУДНИКА\n";
             std::cout << "Фамилия: ";
-            std::cin >> surname;
+            std::getline(std::cin, surname);
             std::cout << "Имя: ";
-            std::cin >> name;
+            std::getline(std::cin, name);
             std::cout << "Отчество: ";
-            std::cin >> middleName;
+            std::getline(std::cin, middleName);
             std::cout << "Должность: ";
-            std::cin >> function;
+            std::getline(std::cin, function);
             std::cout << "Зарплата: ";
             std::cin >> salary;
             department.addEmployee(surname, name, middleName, function, salary);
@@ -209,7 +207,6 @@ void menu_department(vector<Department> &company, vector<Menu> &menu_list, int i
                 department.delEmployee(department.getEmployment()[i - 1].getFIO());
             else
                 error_msg("Меню подразделения", "Неверный номер");
-                // std::cout << "Неверный номер" << std::endl;
             break;
         
         default:
@@ -225,13 +222,25 @@ void menu_department(vector<Department> &company, vector<Menu> &menu_list, int i
     term_reset();
 }
 
+string get_new_value(string field, string old_value)
+{
+    string name;
+
+    std::cout << "[РЕДАКТИРОВАНИЕ] " << field << std::endl;
+    std::cout << "Старое значение: " << old_value << std::endl;
+    std::cout << "Введите новое значение: ";
+    std::getline(std::cin, name);
+    return name;
+}
+
 void menu_employee(Department &department, vector<Menu> &menu_list, int id)
 {
-    bool right;
-    char cmd;
-    string name;
-    int salary;
-    Employee &employee = department.getEmployment()[id];
+    bool    right;
+    char    cmd;
+    string  name;
+    int     salary;
+
+    Employee employee = department.getEmployment()[id];
 
     if (term_set())
         term_reset();
@@ -245,50 +254,37 @@ void menu_employee(Department &department, vector<Menu> &menu_list, int id)
         {
         case 'x':
             return ;
-        
         case 'p':
             employee.printer();
             break;
-        
         case '1':
-            std::cout << "[РЕДАКТИРОВАНИЕ] Введите новую фамилию: ";
-            std::cin >> name;
-            employee.setSurname(name);
+            name = get_new_value("Фамилия", employee.getSurname());
             break;
-
         case '2':
-            std::cout << "[РЕДАКТИРОВАНИЕ] Введите новое имя: ";
-            std::cin >> name;
-            employee.setName(name);
+            name = get_new_value("Имя", employee.getName());
             break;
-
         case '3':
-            std::cout << "[РЕДАКТИРОВАНИЕ] Введите новое отчество: ";
-            std::cin >> name;
-            employee.setMiddleName(name);
+            name = get_new_value("Отчество", employee.getMiddleName());
             break;
-
         case '4':
-            std::cout << "[РЕДАКТИРОВАНИЕ] Введите новую должность: ";
-            std::cin >> name;
-            employee.setFunction(name);
+            name = get_new_value("Должность", employee.getFunction());
             break;
-
         case '5':
-            std::cout << "[РЕДАКТИРОВАНИЕ] Введите новую зарплату: ";
-            std::cin >> salary;
-            employee.setSalary(salary);
+            name = get_new_value("Заработная плата", std::to_string(employee.getSalary()));
             break;
-        
         default:
             right = false;
             break;
         }
         if (term_set())
             term_reset();
-        usleep(SLEEP_WAIT);
         if (right)
+        {
+            department.editEmployee(id, cmd, name);
+            employee = department.getEmployment()[id];
+            usleep(SLEEP_WAIT);
             menu_list[2].printer();
+        }
     }
     term_reset();
 }
