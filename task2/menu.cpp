@@ -106,7 +106,8 @@ void main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list)
         
         case 'a':
             std::cout << "СОЗДАНИЕ НОВОГО ПОДРАЗДЕЛЕНИЯ\n" << "Введите название: ";
-            std::getline(std::cin, name);
+            while (!name.length())
+                std::getline(std::cin, name);
             add_department(*company, name);
             change = true;
             break;
@@ -164,8 +165,8 @@ void menu_department(std::vector<Department> *company, std::vector<Menu> &menu_l
     std::string  name;
     std::string  surname;
     std::string  middleName;
-    std::string  function;
-    int     salary;
+    std::string  function_role;
+    int     salary = 0;
 
     Department &department = (*company)[id];
 
@@ -210,16 +211,20 @@ void menu_department(std::vector<Department> *company, std::vector<Menu> &menu_l
         case 'a':
             std::cout << "ДОБАВЛЕНИЕ НОВОГО СОТРУДНИКА\n";
             std::cout << "Фамилия: ";
-            std::getline(std::cin, surname);
+            while (!surname.length())
+                std::getline(std::cin, surname);
             std::cout << "Имя: ";
-            std::getline(std::cin, name);
+            while (!name.length())
+                std::getline(std::cin, name);
             std::cout << "Отчество: ";
-            std::getline(std::cin, middleName);
+            while (!middleName.length())
+                std::getline(std::cin, middleName);
             std::cout << "Должность: ";
-            std::getline(std::cin, function);
+            while (!function_role.length())
+                std::getline(std::cin, function_role);
             std::cout << "Зарплата: ";
             std::cin >> salary;
-            department.addEmployee(surname, name, middleName, function, salary);
+            department.addEmployee(surname, name, middleName, function_role, salary);
             change = true;
             break;
         
@@ -264,7 +269,8 @@ std::string get_new_value(std::string field, std::string old_value)
     std::cout << "[РЕДАКТИРОВАНИЕ] " << field << std::endl;
     std::cout << "Старое значение: " << old_value << std::endl;
     std::cout << "Введите новое значение: ";
-    std::getline(std::cin, name);
+    while (!name.length())
+        std::getline(std::cin, name);
     return name;
 }
 

@@ -32,7 +32,7 @@ void Department::addEmployee(std::string _surname, std::string _name, std::strin
     Employee employee(_surname, _name, _middleName, _function, _salary);
     employments.push_back(employee);
     count_employee++;
-    mean_salary = (mean_salary + _salary) / count_employee;
+    mean_salary = (mean_salary * (count_employee - 1) + _salary) / count_employee;
 }
 
 void Department::delEmployee(std::string FIO)
