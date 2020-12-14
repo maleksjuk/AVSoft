@@ -25,7 +25,8 @@ make
 * Программа должна обеспечить возможность отмены и возврата изменений (пока не реализовано)
 
 Решение выполнено как консольное приложение.
-*Для работы с файлом формата XML используется решение https://github.com/zeux/pugixml (файлы pugixml.cpp, pugixml.hpp, pugiconfig.hpp)
+
+*Для работы с файлом формата XML используется решение https://github.com/zeux/pugixml (файлы pugixml.cpp, pugixml.hpp, pugiconfig.hpp)*
 
 Чтобы запустить решение:
 ```
