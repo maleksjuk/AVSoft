@@ -2,16 +2,16 @@
 
 int error_msg(std::string block, std::string msg)
 {
-    cout << "\033[31m[ошибка]\033[m " << block << ": " << msg << endl;
+    std::cout << "\033[31m[ошибка]\033[m " << block << ": " << msg << std::endl;
     return 1;
 }
 
-void print_company(vector<Department> &company)
+void print_company(std::vector<Department> &company)
 {
     for (auto &dep : company)
     {
         dep.printer();
-        cout << endl;
+        std::cout << std::endl;
     }
 }
 
@@ -52,13 +52,17 @@ int main()
 {
     term_new_setting();
 
-    vector<Department> company = parser_company();
-    vector<Menu> menu_list;
+    std::vector<Department> company = parser_company();
+
+    // extern std::list<std::vector<Department>> history;
+    // history.push_back(company);
+
+    std::vector<Menu> menu_list;
     menu_list.push_back(create_menu_main());
     menu_list.push_back(create_menu_department());
     menu_list.push_back(create_menu_employee());
 
-    main_menu(company, menu_list);
+    main_menu(&company, menu_list);
 
     return 0;
 }

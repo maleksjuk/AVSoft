@@ -1,16 +1,16 @@
 #include "company.hpp"
 
-vector<Department> parser_company()
+std::vector<Department> parser_company()
 {
-    vector<Department> company;
-    string department_name;
+    std::vector<Department> company;
+    std::string department_name;
 
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_file(XML_FILE);
 
     if (!result)
     {
-        std::cout << "XML [" << XML_FILE << "] parsed with errors" << endl;
+        std::cout << "XML [" << XML_FILE << "] parsed with errors" << std::endl;
         return company;
     }
 

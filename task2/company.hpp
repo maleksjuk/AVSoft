@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <list>
 #include <iostream>
 #include <fcntl.h>
 #include <unistd.h>
@@ -14,12 +15,13 @@
 #include "pugixml.hpp"
 #include "pugiconfig.hpp"
 
-using namespace std;
+// using namespace std;
 
 #define XML_FILE "tst.xml"
 
 #define SLEEP_WAIT 200000
 #define BUFF_SIZE 255
+#define HISTORY_SIZE 100
 
 #define INDENT_DEPARTMENT "  "
 #define INDENT_EMPLOYEE   "    "
@@ -42,33 +44,32 @@ typedef struct s_term
     struct termios  newt;
 } t_term;
 
-static t_term *g_terminal;
 
 class Employee
 {
 private:
-    string  surname;
-    string  name;
-    string  middleName;
-    string  function_role;
+    std::string  surname;
+    std::string  name;
+    std::string  middleName;
+    std::string  function_role;
     int     salary;
 
 public:
-    Employee(string _surname, string _name, string _middleName, 
-             string _function, int _salary);
+    Employee(std::string _surname, std::string _name, std::string _middleName, 
+             std::string _function, int _salary);
 
-    string  getSurname();
-    string  getName();
-    string  getMiddleName();
-    string  getFunction();
+    std::string  getSurname();
+    std::string  getName();
+    std::string  getMiddleName();
+    std::string  getFunction();
     int     getSalary();
 
-    string  getFIO();
+    std::string  getFIO();
 
-    void setSurname(string _surname);
-    void setName(string _name);
-    void setMiddleName(string _middleName);
-    void setFunction(string _function);
+    void setSurname(std::string _surname);
+    void setName(std::string _name);
+    void setMiddleName(std::string _middleName);
+    void setFunction(std::string _function);
     void setSalary(int _salary);
 
     void printer();
@@ -78,26 +79,26 @@ public:
 class Department
 {
 private:
-    string              name;
+    std::string              name;
     int                 count_employee;
     float               mean_salary;
-    vector<Employee>    employments;
+    std::vector<Employee>    employments;
 
 public:
-    Department(string _name);
+    Department(std::string _name);
 
-    string  getName();
+    std::string  getName();
     int     getCount();
     float   getMeanSalary();
 
-    void setName(string _name);
+    void setName(std::string _name);
 
-    vector<Employee> getEmployment();
+    std::vector<Employee> getEmployment();
 
-    void addEmployee(string _surname, string _name, string _middleName,
-                     string _function, int _salary);
-    void delEmployee(string FIO);
-    void editEmployee(int id, char cmd, string new_value);
+    void addEmployee(std::string _surname, std::string _name, std::string _middleName,
+                     std::string _function, int _salary);
+    void delEmployee(std::string FIO);
+    void editEmployee(int id, char cmd, std::string new_value);
 
     void printer();
 };
@@ -106,37 +107,41 @@ public:
 class Menu
 {
 private:
-    string title;
-    map<char, string> actions;
+    std::string title;
+    std::map<char, std::string> actions;
 public:
-    Menu(string _title);
-    string getTitle();
-    void addAction(char c, string action);
+    Menu(std::string _title);
+    std::string getTitle();
+    void addAction(char c, std::string action);
     void printer();
 };
 
 
+// static std::list<std::vector<Department>> history;
+static t_term *g_terminal;
+
+
 // main.cpp
 int     error_msg(std::string block, std::string msg);
-void    print_company(vector<Department> &company);
+void    print_company(std::vector<Department> &company);
 int     term_set();
 void    term_reset(void);
 
 // parser.cpp
-vector<Department> parser_company();
+std::vector<Department> parser_company();
 
 // menu.cpp
 Menu    create_menu_main();
 Menu    create_menu_department();
 Menu    create_menu_employee();
 
-void    main_menu(vector<Department> &company, vector<Menu> &menu_list);
-void    menu_department(vector<Department> &company, vector<Menu> &menu_list, int id);
-void    menu_employee(Department &department, vector<Menu> &menu_list, int id);
+void    main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list);
+void    menu_department(std::vector<Department> *company, std::vector<Menu> &menu_list, int id);
+void    menu_employee(std::vector<Department> *company, Department &department, std::vector<Menu> &menu_list, int id);
 
 // department.cpp
-void    delete_department(vector<Department> &company, string name);
-void    edit_department(vector<Department> &company, string name_old, string name_new);
-void    add_department(vector<Department> &company, string _name);
+void    delete_department(std::vector<Department> &company, std::string name);
+void    edit_department(std::vector<Department> &company, std::string name_old, std::string name_new);
+void    add_department(std::vector<Department> &company, std::string _name);
 
 #endif

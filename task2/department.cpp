@@ -1,13 +1,13 @@
 #include "company.hpp"
 
-Department::Department(string _name)
+Department::Department(std::string _name)
 {
     name = _name;
     count_employee = 0;
     mean_salary = 0;
 }
 
-string Department::getName(){
+std::string Department::getName(){
     return name;
 }
 
@@ -19,15 +19,15 @@ float Department::getMeanSalary(){
     return mean_salary;
 }
 
-void Department::setName(string _name){
+void Department::setName(std::string _name){
     name = _name;
 }
 
-vector<Employee> Department::getEmployment(){
+std::vector<Employee> Department::getEmployment(){
     return employments;
 }
 
-void Department::addEmployee(string _surname, string _name, string _middleName, string _function, int _salary)
+void Department::addEmployee(std::string _surname, std::string _name, std::string _middleName, std::string _function, int _salary)
 {
     Employee employee(_surname, _name, _middleName, _function, _salary);
     employments.push_back(employee);
@@ -35,20 +35,21 @@ void Department::addEmployee(string _surname, string _name, string _middleName, 
     mean_salary = (mean_salary + _salary) / count_employee;
 }
 
-void Department::delEmployee(string FIO)
+void Department::delEmployee(std::string FIO)
 {
     int i = 0;
     for (auto &employee : employments)
     {
         if (employee.getFIO() == FIO)
         {
-            cout 
+            std::cout 
                 << "УДАЛЕНИЕ СОТРУДНИКА: " 
                 << employee.getSurname() << " " 
                 << employee.getName() << " " 
                 << employee.getMiddleName() << " (Должность: "
                 << employee.getFunction() << ", ЗП: "
-                << employee.getSalary() << ")" << endl;
+                << employee.getSalary() << ")"
+                << std::endl;
             
             mean_salary = (mean_salary * count_employee - employee.getSalary()) / (count_employee - 1);
             count_employee--;
@@ -60,7 +61,7 @@ void Department::delEmployee(string FIO)
     }
 }
 
-void Department::editEmployee(int id, char cmd, string new_value)
+void Department::editEmployee(int id, char cmd, std::string new_value)
 {
     Employee &employee = employments[id];
 
@@ -88,22 +89,22 @@ void Department::editEmployee(int id, char cmd, string new_value)
 
 void Department::printer()
 {
-    cout << CLR_CYAN << "Подразделение: " << name << CLR_RESET << endl;
-    cout << INDENT_DEPARTMENT << "Количество сотрудников: " << count_employee << endl;
-    cout << INDENT_DEPARTMENT << "Средняя зарплата: " << mean_salary << endl;
+    std::cout << CLR_CYAN << "Подразделение: " << name << CLR_RESET << std::endl;
+    std::cout << INDENT_DEPARTMENT << "Количество сотрудников: " << count_employee << std::endl;
+    std::cout << INDENT_DEPARTMENT << "Средняя зарплата: " << mean_salary << std::endl;
 
     for (auto &employee : employments)
         employee.printer();
 }
 
-void delete_department(vector<Department> &company, string name)
+void delete_department(std::vector<Department> &company, std::string name)
 {
     int i = 0;
     for (auto &dep : company)
     {
         if (dep.getName() == name)
         {
-            cout << "УДАЛЕНИЕ ПОДРАЗДЕЛЕНИЯ: " << dep.getName() << endl;
+            std::cout << "УДАЛЕНИЕ ПОДРАЗДЕЛЕНИЯ: " << dep.getName() << std::endl;
             company.erase(company.begin() + i);
             break;
         }
@@ -111,24 +112,24 @@ void delete_department(vector<Department> &company, string name)
     }
 }
 
-void edit_department(vector<Department> &company, string name_old, string name_new)
+void edit_department(std::vector<Department> &company, std::string name_old, std::string name_new)
 {
     for (auto &dep : company)
         if (dep.getName() == name_old)
         {
-            cout << "ИЗМЕНЕНИЕ НАЗВАНИЯ ПОДРАЗДЕЛЕНИЯ: " 
-                << dep.getName() << " --> " << name_new << endl;
+            std::cout << "ИЗМЕНЕНИЕ НАЗВАНИЯ ПОДРАЗДЕЛЕНИЯ: " 
+                << dep.getName() << " --> " << name_new << std::endl;
             dep.setName(name_new);
             break;
         }
 }
 
-void add_department(vector<Department> &company, string _name)
+void add_department(std::vector<Department> &company, std::string _name)
 {
     for (auto &dep : company)
         if (dep.getName() == _name)
         {
-            cout << "Подразделение уже существует" << endl;
+            std::cout << "Подразделение уже существует" << std::endl;
             return ;
         }
     company.push_back(Department(_name));

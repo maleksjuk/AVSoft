@@ -1,7 +1,7 @@
 #include "company.hpp"
 
-Employee::Employee(string _surname, string _name, string _middleName, 
-                   string _function, int _salary)
+Employee::Employee(std::string _surname, std::string _name, std::string _middleName, 
+                   std::string _function, int _salary)
 {
     surname = _surname;
     name = _name;
@@ -10,19 +10,19 @@ Employee::Employee(string _surname, string _name, string _middleName,
     salary = _salary;
 }
 
-string Employee::getSurname(){
+std::string Employee::getSurname(){
     return surname;
 }
 
-string Employee::getName(){
+std::string Employee::getName(){
     return name;
 }
 
-string Employee::getMiddleName(){
+std::string Employee::getMiddleName(){
     return middleName;
 }
 
-string Employee::getFunction(){
+std::string Employee::getFunction(){
     return function_role;
 }
 
@@ -30,23 +30,23 @@ int Employee::getSalary(){
     return salary;
 }
 
-string Employee::getFIO(){
+std::string Employee::getFIO(){
     return surname + " " + name + " " + middleName;
 }
 
-void Employee::setSurname(string _surname){
+void Employee::setSurname(std::string _surname){
     surname = _surname;
 }
 
-void Employee::setName(string _name){
+void Employee::setName(std::string _name){
     name = _name;
 }
 
-void Employee::setMiddleName(string _middleName){
+void Employee::setMiddleName(std::string _middleName){
     middleName = _middleName;
 }
 
-void Employee::setFunction(string _function){
+void Employee::setFunction(std::string _function){
     function_role = _function;
 }
 
@@ -56,9 +56,13 @@ void Employee::setSalary(int _salary){
 
 void Employee::printer()
 {
-    cout << CLR_YELLOW << INDENT_EMPLOYEE 
+    std::cout << CLR_YELLOW << INDENT_EMPLOYEE 
         << "ФИО: " << getFIO()
-        << CLR_RESET << endl;
-    cout << INDENT_EMPLOYEE << "    Должность: " << function_role << endl;
-    cout << INDENT_EMPLOYEE << "    Зарплата: " << salary << endl;
+        << CLR_RESET << std::endl;
+    std::cout << INDENT_EMPLOYEE
+        << "    Должность: " << function_role
+        << std::endl;
+    std::cout << INDENT_EMPLOYEE
+        << "    Зарплата: " << salary
+        << std::endl;
 }
