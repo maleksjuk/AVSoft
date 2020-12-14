@@ -4,6 +4,11 @@
 #include <cctype>
 #include <map>
 #include <string>
+
+#ifdef __linux__
+    #include <cstring>
+#endif
+
 #include <vector>
 #include <list>
 #include <iostream>
