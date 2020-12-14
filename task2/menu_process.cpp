@@ -1,69 +1,5 @@
 #include "company.hpp"
 
-Menu::Menu(std::string _title){
-    title = _title;
-}
-
-std::string Menu::getTitle(){
-    return title;
-}
-
-void Menu::addAction(char c, std::string action)
-{
-    if (!actions.count(c))
-        actions.insert({c, action});
-    else
-        actions[c] = action;
-}
-
-void Menu::printer()
-{
-    std::cout
-        << "____________________\n"
-        << CLR_MAGENTA << getTitle() << CLR_RESET << std::endl;
-    for (auto &action : actions)
-        std::cout << action.first << " --> " << action.second << std::endl;
-    std::cout
-        << "^^^^^^^^^^^^^^^^^^^^\n" << std::endl;
-}
-
-Menu create_menu_main()
-{
-    Menu menu("ГЛАВНОЕ МЕНЮ");
-    menu.addAction('x', "выйти");
-    menu.addAction('p', "распечатать всё предприятие");
-    menu.addAction('c', "выбрать подразделение");
-    menu.addAction('a', "добавить подразделение");
-    menu.addAction('r', "удалить подразделение");
-    // menu.addAction('b', "отменить последнее изменение");
-    return menu;
-}
-
-Menu create_menu_department()
-{
-    Menu menu("МЕНЮ ПОДРАЗДЕЛЕНИЯ");
-    menu.addAction('x', "вернуться в главное меню");
-    menu.addAction('p', "распечатать подразделение");
-    menu.addAction('n', "переименовать подразделение");
-    menu.addAction('c', "выбрать сотрудника");
-    menu.addAction('a', "добавить сотрудника");
-    menu.addAction('r', "удалить сотрудника");
-    return menu;
-}
-
-Menu create_menu_employee()
-{
-    Menu menu("МЕНЮ СОТРУДНИКА");
-    menu.addAction('x', "вернуться в меню подразделения");
-    menu.addAction('p', "распечатать данные о сотруднике");
-    menu.addAction('1', "изменить фамилию");
-    menu.addAction('2', "изменить имя");
-    menu.addAction('3', "изменить отчество");
-    menu.addAction('4', "изменить должность");
-    menu.addAction('5', "изменить зарплату");
-    return menu;
-}
-
 void main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list)
 {
     bool    right;
@@ -71,6 +7,11 @@ void main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list)
     char    cmd;
     int     i;
     std::string  name;
+
+    // t_history *curr;
+    // int tmp = 0;
+
+    // std::vector<Department> *company = &(history->company);
 
     if (term_set())
         term_reset();
@@ -106,6 +47,7 @@ void main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list)
         
         case 'a':
             std::cout << "СОЗДАНИЕ НОВОГО ПОДРАЗДЕЛЕНИЯ\n" << "Введите название: ";
+            name.clear();
             while (!name.length())
                 std::getline(std::cin, name);
             add_department(*company, name);
@@ -127,12 +69,25 @@ void main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list)
             break;
 
         // case 'b':
-        //     if (history.size() > 0)
-        //     {
-        //         *company = history.back();
-        //         history.pop_back();
-        //     }
-        //     break;
+            // if (history->prev)
+            // {
+            //     history = history->prev;
+            //     free(history->next);
+            //     company = &(history->company);
+            //     std::cout << "Последнее изменение отменено" << std::endl;
+            // }
+            // else
+            //     std::cout << "Отмена изменений недоступна" << std::endl;
+            
+            // curr = history;
+            // tmp = 0;
+            // while (curr)
+            // {
+            //     tmp++;
+            //     curr = curr->prev;
+            // }
+            // std::cout << "[DEBUG] HISTORY LEN: " << tmp << std::endl;
+            // break;
         
         default:
             right = false;
@@ -143,9 +98,8 @@ void main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list)
             term_reset();
         // if (change)
         // {
-        //     history.push_back(*company);
-        //     if (history.size() > HISTORY_SIZE)
-        //         history.pop_front();
+        //     history = save_to_history(history, *company);
+        //     company = &(history->company);
         // }
         if (right)
         {
@@ -167,6 +121,8 @@ void menu_department(std::vector<Department> *company, std::vector<Menu> &menu_l
     std::string  middleName;
     std::string  function_role;
     int     salary = 0;
+
+    // std::vector<Department> *company = &(history->company);
 
     Department &department = (*company)[id];
 
@@ -190,6 +146,7 @@ void menu_department(std::vector<Department> *company, std::vector<Menu> &menu_l
         
         case 'n':
             std::cout << "[РЕДАКТИРОВАНИЕ] Введите новое название: ";
+            name.clear();
             std::getline(std::cin, name);
             department.setName(name);
             change = true;
@@ -211,15 +168,19 @@ void menu_department(std::vector<Department> *company, std::vector<Menu> &menu_l
         case 'a':
             std::cout << "ДОБАВЛЕНИЕ НОВОГО СОТРУДНИКА\n";
             std::cout << "Фамилия: ";
+            surname.clear();
             while (!surname.length())
                 std::getline(std::cin, surname);
             std::cout << "Имя: ";
+            name.clear();
             while (!name.length())
                 std::getline(std::cin, name);
             std::cout << "Отчество: ";
+            middleName.clear();
             while (!middleName.length())
                 std::getline(std::cin, middleName);
             std::cout << "Должность: ";
+            function_role.clear();
             while (!function_role.length())
                 std::getline(std::cin, function_role);
             std::cout << "Зарплата: ";
@@ -282,6 +243,7 @@ void menu_employee(std::vector<Department> *company, Department &department, std
     int     salary;
     std::string  name;
 
+    // std::vector<Department> *company = &(history->company);
     Employee employee = department.getEmployment()[id];
 
     if (term_set())

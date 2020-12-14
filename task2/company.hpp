@@ -15,8 +15,6 @@
 #include "pugixml.hpp"
 #include "pugiconfig.hpp"
 
-// using namespace std;
-
 #define XML_FILE "tst.xml"
 
 #define SLEEP_WAIT 200000
@@ -37,34 +35,27 @@
 #define CLR_MAGENTA "\033[35m"
 #define CLR_CYAN    "\033[36m"
 
-typedef struct s_term
-{
-    int             fd;
-    struct termios  oldt;
-    struct termios  newt;
-} t_term;
-
 
 class Employee
 {
 private:
-    std::string  surname;
-    std::string  name;
-    std::string  middleName;
-    std::string  function_role;
-    int     salary;
+    std::string surname;
+    std::string name;
+    std::string middleName;
+    std::string function_role;
+    int         salary;
 
 public:
     Employee(std::string _surname, std::string _name, std::string _middleName, 
              std::string _function, int _salary);
 
-    std::string  getSurname();
-    std::string  getName();
-    std::string  getMiddleName();
-    std::string  getFunction();
-    int     getSalary();
+    std::string getSurname();
+    std::string getName();
+    std::string getMiddleName();
+    std::string getFunction();
+    int         getSalary();
 
-    std::string  getFIO();
+    std::string getFIO();
 
     void setSurname(std::string _surname);
     void setName(std::string _name);
@@ -79,17 +70,17 @@ public:
 class Department
 {
 private:
-    std::string              name;
-    int                 count_employee;
-    float               mean_salary;
-    std::vector<Employee>    employments;
+    std::string             name;
+    int                     count_employee;
+    float                   mean_salary;
+    std::vector<Employee>   employments;
 
 public:
     Department(std::string _name);
 
-    std::string  getName();
-    int     getCount();
-    float   getMeanSalary();
+    std::string getName();
+    int         getCount();
+    float       getMeanSalary();
 
     void setName(std::string _name);
 
@@ -107,7 +98,7 @@ public:
 class Menu
 {
 private:
-    std::string title;
+    std::string                 title;
     std::map<char, std::string> actions;
 public:
     Menu(std::string _title);
@@ -117,24 +108,43 @@ public:
 };
 
 
-// static std::list<std::vector<Department>> history;
-static t_term *g_terminal;
+typedef struct s_term
+{
+    int             fd;
+    struct termios  oldt;
+    struct termios  newt;
+} t_term;
+
+typedef struct s_history
+{
+    std::vector<Department> company;
+    struct s_history        *prev;
+    struct s_history        *next;
+} t_history;
+
+static t_history    *history;
+static t_term       *g_terminal;
 
 
 // main.cpp
-int     error_msg(std::string block, std::string msg);
-void    print_company(std::vector<Department> &company);
+int         error_msg(std::string block, std::string msg);
+void        print_company(std::vector<Department> &company);
+t_history   *save_to_history(t_history *current, std::vector<Department> company);
+
+// terminal.cpp
+int     term_new_setting();
 int     term_set();
 void    term_reset(void);
 
 // parser.cpp
 std::vector<Department> parser_company();
 
-// menu.cpp
+// menu_init.cpp
 Menu    create_menu_main();
 Menu    create_menu_department();
 Menu    create_menu_employee();
 
+// menu_process.cpp
 void    main_menu(std::vector<Department> *company, std::vector<Menu> &menu_list);
 void    menu_department(std::vector<Department> *company, std::vector<Menu> &menu_list, int id);
 void    menu_employee(std::vector<Department> *company, Department &department, std::vector<Menu> &menu_list, int id);

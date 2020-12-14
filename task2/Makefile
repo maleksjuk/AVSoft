@@ -1,9 +1,10 @@
 NAME = task2
 
-FLAGS = --std=c++11 -g3 #-Wall -Wextra -Werror
+FLAGS = --std=c++11 -g3
 
 INC = -I ./
-SRC = main.cpp employee.cpp department.cpp parser.cpp pugixml.cpp menu.cpp
+SRC = main.cpp terminal.cpp pugixml.cpp parser.cpp \
+	employee.cpp department.cpp menu_init.cpp menu_process.cpp
 
 all:
 	@g++ $(FLAGS) -o $(NAME) $(INC) $(SRC)

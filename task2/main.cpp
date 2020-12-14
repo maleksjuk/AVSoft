@@ -15,37 +15,32 @@ void print_company(std::vector<Department> &company)
     }
 }
 
-int term_new_setting()
+t_history *save_to_history(t_history *current, std::vector<Department> company)
 {
-    extern t_term *g_terminal;
+    t_history *new_hist;
 
-    g_terminal = (t_term *)malloc(sizeof(t_term));
-    g_terminal->fd = STDOUT_FILENO;
+    new_hist = (t_history *)malloc(sizeof(t_history));
+    new_hist->company.assign(company.begin(), company.end());
+    new_hist->prev = current;
+    new_hist->next = NULL;
 
-    tcgetattr(g_terminal->fd, &g_terminal->oldt);
+    if (current)
+        current->next = new_hist;
 
-    memcpy(&g_terminal->newt, &g_terminal->oldt, sizeof(g_terminal->oldt));
-    g_terminal->newt.c_lflag &= ~(ICANON | ECHO | ECHONL | IEXTEN);
-    g_terminal->newt.c_cc[VMIN] = 1;
-    g_terminal->newt.c_cc[VTIME] = 0;
-    return 0;
+    return new_hist;
 }
 
-int term_set()
+void clear_history()
 {
-    extern t_term *g_terminal;
-
-    if (tcsetattr(g_terminal->fd, TCSANOW, &g_terminal->newt) == -1)
-        return error_msg("Termcap", "failed set new attributes in tcsetattr()");
-    return 0;
-}
-
-void term_reset(void)
-{
-    extern t_term *g_terminal;
-
-    g_terminal->oldt.c_lflag &= 0x200005cb;
-    tcsetattr(g_terminal->fd, TCSANOW, &g_terminal->oldt);
+    while (history->next)
+        history = history->next;
+    while (history->prev)
+    {
+        history = history->prev;
+        free(history->next);
+    }
+    if (history)
+        free(history);
 }
 
 int main()
@@ -54,8 +49,8 @@ int main()
 
     std::vector<Department> company = parser_company();
 
-    // extern std::list<std::vector<Department>> history;
-    // history.push_back(company);
+    // history = save_to_history(NULL, company);
+    // std::vector<Department> *company_main = &(history->company);
 
     std::vector<Menu> menu_list;
     menu_list.push_back(create_menu_main());
@@ -63,6 +58,8 @@ int main()
     menu_list.push_back(create_menu_employee());
 
     main_menu(&company, menu_list);
+    // main_menu(company_main, menu_list);
 
+    // clear_history();
     return 0;
 }
