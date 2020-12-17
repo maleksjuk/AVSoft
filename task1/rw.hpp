@@ -4,6 +4,10 @@
 #include <pthread.h>
 #include <string>
 
+#ifdef __linux__
+    #include <cstring>
+#endif
+
 #define NUM_READER 10
 #define NUM_WRITER 12
 
